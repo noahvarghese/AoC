@@ -16,7 +16,9 @@
         "noImplicitReturns": true,
         "outDir": "./build",
         "resolveJsonModule": true,
-        "paths": {},
+        "paths": {
+            "@util/*": ["util/*"]
+        },
         "rootDir": "./",
         "skipLibCheck": true,
         "sourceMap": true,
