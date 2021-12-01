@@ -2,7 +2,7 @@
 
 Advent of code entries
 Done as time permits
-<a href="https://adventofcode.com/2021/about">adventofcode.com</a>
+<a href="https://adventofcode.com">adventofcode.com</a>
 
 # 2021
 
