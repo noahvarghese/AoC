@@ -1,5 +1,5 @@
 import { getLines } from "./lib/file";
-import Logs from "./lib/logs";
+import Logs from "@util/logs";
 import dotenv from "dotenv";
 dotenv.config({ path: "../.env" });
 
