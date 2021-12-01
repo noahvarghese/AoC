@@ -1,7 +1,6 @@
 {
-    "name": "1",
+    "name": "2",
     "version": "1.0.0",
-    "description": "",
     "main": "index.js",
     "scripts": {
         "init": "npm run init:npm-shell && npm run init:packages",
@@ -12,5 +11,6 @@
     },
     "keywords": [],
     "author": "",
-    "license": "ISC"
+    "license": "ISC",
+    "description": ""
 }

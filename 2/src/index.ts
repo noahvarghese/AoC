@@ -20,14 +20,20 @@ const INPUT_FILE = "./data/input.txt";
     const readings = await getLines<number>(INPUT_FILE, converter, validator);
     let counter = 0;
 
-    if (readings.length < 2) {
+    if (readings.length < 4) {
         Logs.Result(counter);
         return;
     }
 
-    for (let i = 1; i < readings.length; i++) {
-        const previousDepth = readings[i - 1];
-        const currentDepth = readings[i];
+    if (readings.length === 4) {
+        Logs.Result(1);
+        return;
+    }
+
+    for (let i = 3; i < readings.length; i++) {
+        const previousDepth =
+            readings[i - 3] + readings[i - 2] + readings[i - 1];
+        const currentDepth = readings[i - 2] + readings[i - 1] + readings[i];
 
         if (currentDepth > previousDepth) {
             counter++;
