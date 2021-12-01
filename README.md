@@ -1,4 +1,4 @@
-# AoC - Advent of Code
+# Advent of Code
 
 Advent of code entries<br />
 Done as time permits<br />
