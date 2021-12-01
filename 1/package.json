@@ -1,0 +1,28 @@
+{
+    "name": "1",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "init": "npm run init:npm-shell && npm run init:packages",
+        "init:npm-shell": "npm config set script-shell /bin/bash",
+        "init:packages": "npm i",
+        "start:dev": "NODE_ENV=dev nodemon -e ts,.env,json --ignore build/ --ignore __test__/ --exec ts-node ./src/index.ts -- dev",
+        "start": "NODE_ENV=prod node ./index.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "fs": "^0.0.1-security"
+    },
+    "devDependencies": {
+        "@types/node": "^16.11.11",
+        "@typescript-eslint/eslint-plugin": "^5.5.0",
+        "@typescript-eslint/parser": "^5.5.0",
+        "dotenv": "^10.0.0",
+        "nodemon": "^2.0.15",
+        "ts-node": "^10.4.0"
+    }
+}

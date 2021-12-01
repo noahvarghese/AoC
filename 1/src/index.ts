@@ -1,11 +1,13 @@
 import { getLines } from "./lib/file";
 import Logs from "./lib/logs";
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ path: "../.env" });
 
 const INPUT_FILE = "./data/input.txt";
 
 (async () => {
+    Logs.configureLogs(false);
+
     const converter = (val: string) => Number(val);
     const validator = (val: string) => {
         if (isNaN(converter(val))) {

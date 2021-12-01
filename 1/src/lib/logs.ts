@@ -1,6 +1,3 @@
-import dotenv from "dotenv";
-dotenv.config();
-
 enum LogLevels {
     TEST = 0,
     EVENT = 1,
@@ -87,7 +84,9 @@ export default class Logs {
         if (disableLogs) {
             Logs.logLevel = 0;
         } else {
-            Logs.logLevel = Number(process.env.LOG_LEVEL) ?? Infinity;
+            Logs.logLevel = isNaN(Number(process.env.LOG_LEVEL))
+                ? Infinity
+                : Number(process.env.LOG_LEVEL);
         }
     };
 

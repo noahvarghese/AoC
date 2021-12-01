@@ -1,40 +1,25 @@
 {
-    "name": "aoc",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "scripts": {
-        "init": "npm run init:npm-shell && npm init:packages",
-        "init:npm-shell": "npm config set script-shell /bin/bash",
-        "init:packages": "npm i",
-        "start:dev": "NODE_ENV=dev nodemon -e ts,.env,json --ignore build/ --ignore __test__/ --exec ts-node ./src/index.ts -- dev",
-        "start": "NODE_ENV=prod node ./index.js",
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/noahvarghese/AoC.git"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/noahvarghese/AoC/issues"
-    },
-    "homepage": "https://github.com/noahvarghese/AoC#readme",
-    "devDependencies": {
-        "@types/node": "^16.11.11",
-        "@typescript-eslint/eslint-plugin": "^5.5.0",
-        "@typescript-eslint/parser": "^5.5.0",
-        "dotenv": "^10.0.0",
-        "nodemon": "^2.0.15",
-        "prettier": "^2.5.0",
-        "ts-node": "^10.4.0",
-        "tsconfig-paths": "^3.12.0",
-        "typescript": "^4.5.2"
-    },
-    "dependencies": {
-        "fs": "^0.0.1-security",
-        "path": "^0.12.7"
-    }
+  "name": "aoc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/noahvarghese/AoC.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/noahvarghese/AoC/issues"
+  },
+  "homepage": "https://github.com/noahvarghese/AoC#readme",
+  "devDependencies": {
+    "prettier": "^2.5.0",
+    "tsconfig-paths": "^3.12.0",
+    "typescript": "^4.5.2"
+  }
 }
