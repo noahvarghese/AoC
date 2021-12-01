@@ -1,7 +1,7 @@
 # AoC - Advent of Code
 
-Advent of code entries\n
-Done as time permits\n
+Advent of code entries<br />
+Done as time permits<br />
 <a href="https://adventofcode.com">adventofcode.com</a>
 
 # 2021
