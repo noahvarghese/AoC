@@ -6,8 +6,8 @@
         "init": "npm run init:npm-shell && npm run init:packages",
         "init:npm-shell": "npm config set script-shell /bin/bash",
         "init:packages": "npm i",
-        "start:dev": "NODE_ENV=dev nodemon -e ts,.env,json --ignore build/ --ignore __test__/ --exec ts-node ./src/index.ts -- dev",
-        "start": "NODE_ENV=prod node ./index.js"
+        "start:dev": "NODE_ENV=dev nodemon -e ts,.env,json --exec ts-node ./src/index.ts -- dev",
+        "start": "NODE_ENV=prod ts-node ./src/index.ts"
     },
     "keywords": [],
     "author": "",
