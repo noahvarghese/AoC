@@ -50,19 +50,15 @@ const star2 = (depths: readonly number[]): number => {
 (async () => {
     Logs.configureLogs(false);
 
-    const converter = (val: string) => Number(val);
-    const validator = (val: string) => {
-        if (isNaN(converter(val))) {
-            throw new Error("Invalid depth");
-        }
+    const reading = await getLines(INPUT_FILE);
 
-        return true;
-    };
+    const depths = reading.map((d) => {
+        if (isNaN(Number(d))) throw new Error("Number not found");
+        return Number(d);
+    });
 
-    const readings = await getLines<number>(INPUT_FILE, converter, validator);
-
-    const firstStarResult = star1(readings);
-    const secondStarResult = star2(readings);
+    const firstStarResult = star1(depths);
+    const secondStarResult = star2(depths);
 
     Logs.Result(`First result: ${firstStarResult}`);
     Logs.Result(`Second result: ${secondStarResult}`);

@@ -1,11 +1,9 @@
 import fs from "fs";
 import readline from "readline";
 
-export async function getLines<T>(
-    filePath: string,
-    converter: (val: string) => T,
-    validator?: (val: string) => boolean
-): Promise<ReadonlyArray<T>> {
+export async function getLines(
+    filePath: string
+): Promise<ReadonlyArray<string>> {
     if (!fs.lstatSync(filePath).isFile()) {
         throw new Error("Path is not a regular file");
     }
@@ -19,12 +17,10 @@ export async function getLines<T>(
         crlfDelay: Infinity,
     });
 
-    const data: T[] = [];
+    const data: string[] = [];
 
     for await (const line of reader) {
-        if (!validator || validator(line)) {
-            data.push(converter(line));
-        }
+        data.push(line);
     }
 
     return data;
