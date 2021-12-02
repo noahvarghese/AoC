@@ -1,4 +1,4 @@
-# Advent of Code
+# Advent of Code :christmas_tree: :snowflake: :snowman_with_snow:
 
 Advent of code entries<br />
 Done as time permits<br />
