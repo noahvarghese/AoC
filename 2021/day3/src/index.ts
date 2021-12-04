@@ -37,43 +37,50 @@ const star1 = (lines: readonly string[]): number => {
 };
 
 const star2 = (lines: readonly string[]): number => {
-    let oxygen = NaN,
-        co2 = NaN;
+    function filterByCommonValueAtPosition(
+        rows: number[],
+        commonality: "1" | "0",
+        position: number
+    ): number {
+        // filter
+        const rows0: number[] = [];
+        const rows1: number[] = [];
 
-    const arrayLength = lines[0].length;
-    const frequency = new Array<number>(arrayLength);
-    const matcher = new Array<number>(arrayLength);
-
-    for (let i = 0; i < arrayLength; i++) {
-        frequency[i] = 0;
-        matcher[i] = NaN;
-    }
-
-    for (let i = 0; i < arrayLength; i++) {
-        for (const line of lines) {
-            // checks that the line is a match
-            const isMatch = line.startsWith(
-                matcher.filter((b) => !isNaN(b)).join("")
-            );
-            if (i === 0 || (!isNaN(matcher[i - 1]) && isMatch)) {
-                // gets the frequency of the 1s
-                if (line[i] === "1") {
-                    frequency[i]++;
-                }
+        Logs.Debug(rows.length);
+        rows.map((r) => r.toString(2)).forEach((row) => {
+            if (row[position] == "0") {
+                rows0.push(parseInt(row, 2));
             }
+            if (row[position] == "1") {
+                rows1.push(parseInt(row));
+            }
+        });
+
+        if (rows.length === 0) return NaN;
+        else if (rows.length === 1) return rows[0];
+        else {
+            if (commonality === "1")
+                return filterByCommonValueAtPosition(
+                    rows1.length >= rows0.length ? rows1 : rows0,
+                    commonality,
+                    position + 1
+                );
+            else
+                return filterByCommonValueAtPosition(
+                    rows0.length <= rows1.length ? rows0 : rows1,
+                    commonality,
+                    position + 1
+                );
         }
-        // determines wheter matcher[i] should be a 0 or 1
-        frequency[i] = frequency[i] >= lines.length / 2 ? 1 : 0;
-        matcher[i] = frequency[i];
     }
 
-    for (let i = 0; i < arrayLength; i++) {}
+    const bitArrays = lines.map((n) => parseInt(n, 2));
 
-    oxygen = parseInt(matcher.join(""), 2);
-    co2 = parseInt(frequency.map((b) => (b === 1 ? 0 : 1)).join(""), 2);
+    const co2 = filterByCommonValueAtPosition(bitArrays, "0", 0);
+    const oxygen = filterByCommonValueAtPosition(bitArrays, "1", 0);
 
-    Logs.Debug(`Oxygen Rating: ${oxygen}`);
-    Logs.Debug(`CO2 Scrubber Rating: ${co2}`);
+    Logs.Debug(`Oxygen Rating: ${oxygen} ${oxygen.toString(2)}`);
+    Logs.Debug(`CO2 Scrubber Rating: ${co2} ${co2.toString(2)}`);
 
     return oxygen * co2;
 };
