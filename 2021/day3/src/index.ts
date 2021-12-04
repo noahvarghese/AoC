@@ -2,6 +2,7 @@ import { getLines } from "@util/file";
 import Logs from "@util/logs";
 
 const INPUT_FILE = "./data/input.txt";
+// const INPUT_FILE = "./data/example.txt";
 
 const star1 = (lines: readonly string[]): number => {
     // gamma rate is 8 bits
@@ -38,46 +39,56 @@ const star1 = (lines: readonly string[]): number => {
 
 const star2 = (lines: readonly string[]): number => {
     function filterByCommonValueAtPosition(
-        rows: number[],
+        rows: readonly string[],
         commonality: "1" | "0",
         position: number
     ): number {
         // filter
-        const rows0: number[] = [];
-        const rows1: number[] = [];
+        const rows0: string[] = [];
+        const rows1: string[] = [];
 
-        Logs.Debug(rows.length);
-        rows.map((r) => r.toString(2)).forEach((row) => {
+        rows.forEach((row) => {
             if (row[position] == "0") {
-                rows0.push(parseInt(row, 2));
+                rows0.push(row);
             }
             if (row[position] == "1") {
-                rows1.push(parseInt(row));
+                rows1.push(row);
             }
         });
 
-        if (rows.length === 0) return NaN;
-        else if (rows.length === 1) return rows[0];
-        else {
+        if (rows.length === 0) throw new Error("No rows returned");
+        else if (rows.length === 1) {
+            return parseInt(rows[0], 2);
+        } else {
             if (commonality === "1")
                 return filterByCommonValueAtPosition(
-                    rows1.length >= rows0.length ? rows1 : rows0,
+                    rows0.length === rows.length
+                        ? rows0
+                        : rows1.length === rows.length
+                        ? rows1
+                        : rows1.length >= rows0.length
+                        ? rows1
+                        : rows0,
                     commonality,
                     position + 1
                 );
             else
                 return filterByCommonValueAtPosition(
-                    rows0.length <= rows1.length ? rows0 : rows1,
+                    rows0.length === rows.length
+                        ? rows0
+                        : rows1.length === rows.length
+                        ? rows1
+                        : rows0.length <= rows1.length
+                        ? rows0
+                        : rows1,
                     commonality,
                     position + 1
                 );
         }
     }
 
-    const bitArrays = lines.map((n) => parseInt(n, 2));
-
-    const co2 = filterByCommonValueAtPosition(bitArrays, "0", 0);
-    const oxygen = filterByCommonValueAtPosition(bitArrays, "1", 0);
+    const co2 = filterByCommonValueAtPosition(lines, "0", 0);
+    const oxygen = filterByCommonValueAtPosition(lines, "1", 0);
 
     Logs.Debug(`Oxygen Rating: ${oxygen} ${oxygen.toString(2)}`);
     Logs.Debug(`CO2 Scrubber Rating: ${co2} ${co2.toString(2)}`);
