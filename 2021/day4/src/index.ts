@@ -1,19 +1,19 @@
 import { getLines } from "@util/file";
 import Logs from "@util/logs";
 
-const INPUT_FILE = "./data/example.txt";
-// const INPUT_FILE = "./data/input.txt";
+// const INPUT_FILE = "./data/example.txt";
+const INPUT_FILE = "./data/input.txt";
 
 class Cell {
     private _number: number;
     get number(): number {
         return this._number;
     }
-    private _called: boolean;
+    private _marked: boolean;
 
     constructor(number: number, called: boolean) {
         this._number = number;
-        this._called = called;
+        this._marked = called;
     }
 
     shouldMark(numberCalled: number) {
@@ -21,11 +21,17 @@ class Cell {
     }
 
     mark() {
-        this._called = true;
+        this._marked = true;
     }
 
     isMarked() {
-        return this._called;
+        return this._marked;
+    }
+
+    get [Symbol.toStringTag]() {
+        return this._marked
+            ? this._number.toString().bold()
+            : this._number.toString();
     }
 }
 
@@ -71,13 +77,22 @@ class Puzzle {
     }
 
     hasWon(): boolean {
+        const vertical = new Array(this._length).map(() => true);
+
         for (let i = 0; i < this._length; i++) {
+            let horizontal = true;
+
             for (let j = 0; j < this._width; j++) {
-                // check horizontal
-                // check vertical
+                const isMarked = this._grid[i][j].isMarked();
+
+                vertical[i] = vertical[i] && isMarked;
+                horizontal = horizontal && isMarked;
                 // check diagonal
             }
+            if (horizontal) return true;
         }
+
+        if (vertical.find((v) => v === true)) return true;
         return false;
     }
 
@@ -142,10 +157,13 @@ const star1 = (lines: readonly string[]) => {
             puzzle.mark(numbersToDraw[i]);
             // check if puzzle has won
             if (puzzle.hasWon()) {
-                // score * last number called
+                Logs.Debug(puzzle);
                 score = puzzle.score() * numbersToDraw[i];
                 break;
             }
+        }
+        if (score !== 0) {
+            break;
         }
     }
 
@@ -157,6 +175,6 @@ const star1 = (lines: readonly string[]) => {
     Logs.configureLogs(false);
 
     const lines = await getLines(INPUT_FILE);
-    const result = star1(lines);
-    Logs.Result(result);
+    const score = star1(lines);
+    Logs.Result(score);
 })();
