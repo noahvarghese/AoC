@@ -7,7 +7,7 @@ Done as time permits<br />
 # 2021
 
 ![](https://img.shields.io/badge/day%20📅-4-blue)
-![](https://img.shields.io/badge/stars%20⭐-4-yellow)
+![](https://img.shields.io/badge/stars%20⭐-5-yellow)
 ![](https://img.shields.io/badge/days%20completed-2-red)
 
 Starting off in 'easy mode' as TypeScript is my most used language currently.
