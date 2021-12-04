@@ -7,6 +7,7 @@
         "day1": "cd ./day1 && npm run start && cd ../",
         "day2": "cd ./day2 && npm run start && cd ../",
         "day3": "cd ./day3 && npm run start && cd ../",
+        "day4": "cd ./day4 && npm run start && cd ../",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {
