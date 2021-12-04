@@ -29,9 +29,7 @@ class Cell {
     }
 
     get [Symbol.toStringTag]() {
-        return this._marked
-            ? this._number.toString().bold()
-            : this._number.toString();
+        return this._marked ? "X" : this._number.toString();
     }
 }
 
@@ -39,11 +37,17 @@ class Puzzle {
     private _width: number;
     private _length: number;
     private _grid: Cell[][];
+    private _won: boolean;
+
+    get won(): boolean {
+        return this._won;
+    }
 
     constructor(bingo: string[], width = 5, length = 5) {
         this._grid = new Array(width);
         this._length = length;
         this._width = width;
+        this._won = false;
 
         for (let i = 0; i < length; i++) {
             this._grid[i] = new Array(length);
@@ -71,13 +75,16 @@ class Puzzle {
             for (let j = 0; j < this._width; j++) {
                 // not sure if a number can repeat on a board
                 const cell = this._grid[i][j];
-                if (cell.shouldMark(number)) cell.mark();
+                if (cell.shouldMark(number)) {
+                    cell.mark();
+                    this.checkHasWon();
+                }
             }
         }
     }
 
-    hasWon(): boolean {
-        const vertical = new Array(this._length).map(() => true);
+    private checkHasWon(): void {
+        const vertical = new Array(this._length).fill(true);
 
         for (let i = 0; i < this._length; i++) {
             let horizontal = true;
@@ -85,15 +92,21 @@ class Puzzle {
             for (let j = 0; j < this._width; j++) {
                 const isMarked = this._grid[i][j].isMarked();
 
-                vertical[i] = vertical[i] && isMarked;
+                vertical[j] = vertical[j] && isMarked;
                 horizontal = horizontal && isMarked;
-                // check diagonal
             }
-            if (horizontal) return true;
+            if (horizontal) {
+                this._won = true;
+                return;
+            }
         }
 
-        if (vertical.find((v) => v === true)) return true;
-        return false;
+        if (vertical.find((v) => v === true) === true) {
+            this._won = true;
+            return;
+        }
+
+        this._won = false;
     }
 
     score(): number {
@@ -108,45 +121,41 @@ class Puzzle {
         }
         return sum;
     }
+
+    get [Symbol.toStringTag]() {
+        let returnVal = "\n\n";
+        for (const line of this._grid) {
+            returnVal +=
+                line.map((l) => (l.isMarked() ? "X" : l.number)).join(" ") +
+                "\n";
+        }
+        returnVal += "\n\n";
+        return returnVal;
+    }
 }
 
-export const mark = (
-    number: number,
-    puzzles: { number: number; called: boolean }[][][]
-) => {
-    for (let i = 0; i < puzzles.length; i++) {
-        for (let j = 0; j < puzzles[i].length; j++) {
-            for (let k = 0; k < puzzles[i][j].length; k++) {
-                if (puzzles[i][j][k].number === number) {
-                    puzzles[i][j][k].called = true;
-                }
-            }
+const loadBoards = (input: string[]): Puzzle[] => {
+    const puzzles: Puzzle[] = [];
+    let start = 0;
+
+    for (let i = 0; i < input.length; i++) {
+        if (input[i] === "" || i === input.length - 1) {
+            puzzles.push(
+                new Puzzle(
+                    input.slice(start, i === input.length - 1 ? i + 1 : i)
+                )
+            );
+            start = i + 1;
         }
     }
+    return puzzles;
 };
 
 const star1 = (lines: readonly string[]) => {
     // first line is the numbers
     const numbersToDraw = lines[0].split(",").map((s) => Number(s));
 
-    const puzzles: Puzzle[] = [];
-    const boardContainer = lines.slice(2);
-
-    let start = 0;
-
-    for (let i = 0; i < boardContainer.length; i++) {
-        if (boardContainer[i] === "" || i === boardContainer.length - 1) {
-            puzzles.push(
-                new Puzzle(
-                    boardContainer.slice(
-                        start,
-                        i === boardContainer.length - 1 ? i + 1 : i
-                    )
-                )
-            );
-            start = i + 1;
-        }
-    }
+    const puzzles = loadBoards(lines.slice(2));
 
     let score = 0;
 
@@ -156,8 +165,7 @@ const star1 = (lines: readonly string[]) => {
         for (const puzzle of puzzles) {
             puzzle.mark(numbersToDraw[i]);
             // check if puzzle has won
-            if (puzzle.hasWon()) {
-                Logs.Debug(puzzle);
+            if (puzzle.won) {
                 score = puzzle.score() * numbersToDraw[i];
                 break;
             }
@@ -171,10 +179,39 @@ const star1 = (lines: readonly string[]) => {
     return score;
 };
 
+const star2 = (lines: readonly string[]) => {
+    // first line is the numbers
+    const numbersToDraw = lines[0].split(",").map((s) => Number(s));
+    const puzzles = loadBoards(lines.slice(2));
+
+    let prevWinner: Puzzle | undefined;
+    let notWon: Puzzle[] = puzzles;
+    let prevNum = NaN;
+
+    // for each turn
+    for (let i = 0; i < numbersToDraw.length; i++) {
+        const number = numbersToDraw[i];
+        // mark all boards
+        notWon.forEach((p) => {
+            p.mark(number);
+            notWon = notWon.filter((_p) => !_p.won);
+            if (p.won) {
+                prevWinner = p;
+                prevNum = number;
+            }
+        });
+    }
+    return (prevWinner?.score() ?? 0) * prevNum;
+};
+
 (async () => {
     Logs.configureLogs(false);
 
     const lines = await getLines(INPUT_FILE);
-    const score = star1(lines);
-    Logs.Result(score);
+
+    const score1 = star1(lines);
+    Logs.Result(score1);
+
+    const score2 = star2(lines);
+    Logs.Result(score2);
 })();
